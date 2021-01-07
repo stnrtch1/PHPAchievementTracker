@@ -1,5 +1,33 @@
 <?php 
 
+  //setup database config
+  include 'config/config.inc.php';
+  $DB_HOST = $config['DB_HOST'];
+  $DB_USERNAME = $config['DB_USERNAME'];
+  $DB_PASSWORD = $config['DB_PASSWORD'];
+  $DB_DATABASE = $config['DB_DATABASE'];
+  $DB_GAMETABLE = $config['DB_GAMETABLE'];
+
+  //now, connect to the database
+  $connection = mysqli_connect($DB_HOST,$DB_USERNAME,$DB_PASSWORD)
+  or die(mysqli_error($connection));
+  $db = mysqli_select_db($connection,$DB_DATABASE) or die(mysqli_error($connection));
+
+  $sql = "SELECT * FROM $DB_GAMETABLE ORDER BY gameName ASC";
+  $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
+
+  //put all the game info into an array
+  while($row = mysqli_fetch_array($result)){
+    $games[] = array(
+      'ID'   =>               $row['gameID'],
+      'Name' =>               $row['gameName'],
+      'AchievementsEarned' => $row['gameAchievementCount'],
+      'MaxAchievments' =>     $row['gameAchievementMax'],
+    );
+  }
+
+  print_r($games);
+
 ?>
 
 <!doctype html>
