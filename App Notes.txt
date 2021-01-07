@@ -1,0 +1,24 @@
+- All visuals will be handled by bootstrap
+
+- Games should be able to be added, edited, and removed from the tracker.
+- When adding a game, the user should be able to enter: The Game Name, Achievements Earned and Max Achievements per game.
+- When editing a game, the user should only be able to change the Achievements Earned and Max Achievements totals.
+- When deleting a game, there must be a popup to confirm the game deletion.
+
+- Notifications should be used for when these actions are performed i.e. "Game has been added", "Game has been deleted"
+
+- The table will start by being organized by game names in alphabetical order
+- The user should have the ability to change the order of the table by: Name, Achievements Earned, Max Achievements and Achievement Completion
+
+- There will be two counters at the end of the table:
+- One will keep track of how many achievements have been earned and show an appropriate percentage
+- The second will keep track of the average achievement completion rate between all games
+
+Game Object:
+gameName
+gameAchievementCount
+gameAchievementMax
+
+- Potential Login System
+- Multiple users can use the tracker and keep their own progress
+- (Maybe) look into comparing same games

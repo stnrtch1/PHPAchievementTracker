@@ -12,14 +12,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <title>Hello, world!</title>
+    <title>The Achievement Tracker</title>
   </head>
-  <body class="pt-3">
+  <body class="mt-3">
     <div class="container">
 
-      <h1>Hello, world!</h1>
+      <h1>The Achievement Tracker</h1>
 
-      <table class="table table-striped table-hover">
+      <button class="btn btn-primary">Add Game</button>
+      <button class="btn btn-warning">Delete Game</button>
+
+      <table class="mt-3 table table-striped table-hover">
         <thead class="thead-dark">
           <tr>
             <th>Game</th>
@@ -50,12 +53,8 @@
         </tbody>
       </table>
 
-      
 
-      <div class="container-sm">100% wide until small breakpoint</div>
-      <div class="container-md">100% wide until medium breakpoint</div>
-      <div class="container-lg">100% wide until large breakpoint</div>
-      <div class="container-xl">100% wide until extra large breakpoint</div>
+
     </div>
     
     <!-- JS Scripts needed for Bootstrap-->
