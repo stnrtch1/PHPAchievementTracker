@@ -26,15 +26,17 @@
     $percentage = round(($count / $max) * 100, 2) .'%';
 
     $games[] = array(
-      'ID'   =>               $row['gameID'],
-      'Name' =>               $row['gameName'],
+      'ID'                 => $row['gameID'],
+      'Name'               => $row['gameName'],
       'AchievementsEarned' => $row['gameAchievementCount'],
-      'MaxAchievements' =>     $row['gameAchievementMax'],
-      'PercentageEarned' =>   $percentage,
+      'MaxAchievements'    => $row['gameAchievementMax'],
+      'PercentageEarned'   => $percentage,
     );
   }
 
-  print_r($games);
+  if(isset($games)){
+    print_r($games);
+  } 
 
 ?>
 
@@ -58,37 +60,32 @@
       <button class="btn btn-primary">Add Game</button>
       <button class="btn btn-warning">Delete Game</button>
 
-      <table class="mt-3 table table-striped table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th>Game</th>
-            <th>Achievements Earned</th>
-            <th>Achievement Total</th>
-            <th>Percentage Earned</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Crash Bandicoot 3</td>
-            <td>26</td>
-            <td>26</td>
-            <td>100%</td>
-          </tr>
-          <tr>
-            <td>Spyro 3</td>
-            <td>5</td>
-            <td>50</td>
-            <td>10%</td>
-          </tr>
-          <tr>
-            <td>Payday 2</td>
-            <td>305</td>
-            <td>1000</td>
-            <td>30.5%</td>
-          </tr>
-        </tbody>
-      </table>
-
+      <?php
+        if(isset($games)){ ?> 
+          <table class="mt-3 table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>Game</th>
+                <th>Achievements Earned</th>
+                <th>Achievement Total</th>
+                <th>Percentage Earned</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                foreach ($games as $game){ ?>
+                  <tr>
+                    <td><?=$game['Name']?></td>
+                    <td><?=$game['AchievementsEarned']?></td>
+                    <td><?=$game['MaxAchievements']?></td>
+                    <td><?=$game['PercentageEarned']?></td>
+                  </tr>
+                <?php } ?>
+            </tbody>
+          </table>
+        <?php } else { ?>
+          <h3 class="mt-5 text-muted"><em>There are currently no games in your tracker. Click the "Add Game" button to add more and start tracking. </em></h3>
+        <?php } ?>
 
 
     </div>
