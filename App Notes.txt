@@ -15,6 +15,7 @@
 - The second will keep track of the average achievement completion rate between all games
 
 Game Object:
+gameID
 gameName
 gameAchievementCount
 gameAchievementMax
