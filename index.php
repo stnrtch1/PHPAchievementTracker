@@ -18,11 +18,19 @@
 
   //put all the game info into an array
   while($row = mysqli_fetch_array($result)){
+    //there's an additional item that will be added to the array
+    //it's the completed percentage of games and will be calculated based on the count and max
+    $count = $row['gameAchievementCount'];
+    $max = $row['gameAchievementMax'];
+
+    $percentage = round(($count / $max) * 100, 2) .'%';
+
     $games[] = array(
       'ID'   =>               $row['gameID'],
       'Name' =>               $row['gameName'],
       'AchievementsEarned' => $row['gameAchievementCount'],
-      'MaxAchievments' =>     $row['gameAchievementMax'],
+      'MaxAchievements' =>     $row['gameAchievementMax'],
+      'PercentageEarned' =>   $percentage,
     );
   }
 
