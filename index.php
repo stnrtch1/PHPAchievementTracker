@@ -81,6 +81,7 @@
           <table class="mt-3 table table-striped table-hover">
             <thead class="thead-dark">
               <tr>
+                <th></th>
                 <th>Game</th>
                 <th>Achievements Earned</th>
                 <th>Achievement Total</th>
@@ -91,6 +92,14 @@
               <?php
                 foreach ($games as $game){ ?>
                   <tr>
+                    <td>
+                      <button class="btn btn-primary mb-1">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn btn-danger mb-1">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
                     <td><?=$game['Name']?></td>
                     <td><?=$game['AchievementsEarned']?></td>
                     <td><?=$game['MaxAchievements']?></td>
