@@ -35,10 +35,6 @@
     );
   }
 
-  if(isset($games)){
-    print_r($games);
-  } 
-
   //SESSION DATA
   //If any session data is available, show it for the user
   if(isset($_SESSION["Message"])){
@@ -60,6 +56,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Font Awesome Icons-->
+    <script src="https://kit.fontawesome.com/fa43b4ba7b.js" crossorigin="anonymous"></script>
 
     <title>The Achievement Tracker</title>
   </head>
