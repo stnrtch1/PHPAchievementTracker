@@ -57,7 +57,9 @@
 
       <h1>The Achievement Tracker</h1>
 
-      <button class="btn btn-primary">Add Game</button>
+      <form method="POST" action="addgame.php">
+        <button class="btn btn-primary">Add Game</button>
+      </form>
       <button class="btn btn-warning">Delete Game</button>
 
       <?php
