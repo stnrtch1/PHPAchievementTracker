@@ -1,4 +1,5 @@
 <?php 
+  session_start();
 
   //setup database config
   include 'config/config.inc.php';
@@ -38,6 +39,16 @@
     print_r($games);
   } 
 
+  //SESSION DATA
+  //If any session data is available, show it for the user
+  if(isset($_SESSION["Message"])){
+    $message = $_SESSION["Message"];
+    $status = $_SESSION["MessageType"];
+    //once the session data is set, clear it so on refresh it does not show again
+    $_SESSION["Message"] = "";
+    $_SESSION["MessageType"] = "";
+  }
+
 ?>
 
 <!doctype html>
@@ -57,10 +68,14 @@
 
       <h1>The Achievement Tracker</h1>
 
+      <?php if(isset($message)){ ?>
+        <div class="mt-2 mb-2 <?php if($status=="Success"){print "text-success";}else{print "text-danger";}?>"><?=$message?></div>
+      <?php } ?>
+
       <form method="POST" action="addgame.php">
         <button class="btn btn-primary">Add Game</button>
       </form>
-      <button class="btn btn-warning">Delete Game</button>
+      
 
       <?php
         if(isset($games)){ ?> 

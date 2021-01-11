@@ -1,7 +1,6 @@
 <?php
-    if(isset($_POST)){
-        print_r($_POST);
-    }
+    //start session so success/failure messages can be sent
+    session_start();
 
     //GO BACK
     //if "Go Back" was hit, return to index.php
@@ -32,7 +31,24 @@
         if($_POST['gameName'] != ""){
             //is the max achievements field greater or equal to the achievements earned field
             if($_POST['gameMaxAchievements'] >= $_POST['gameAchievementsEarned']){
-                print "<br>Game is good to go!";
+                //everything is all good, prepare the sql statement
+                $sql = "INSERT INTO $DB_GAMETABLE VALUES (null,?,?,?)";
+                $stmt = mysqli_prepare($connection,$sql);
+                mysqli_stmt_bind_param($stmt,"sii",$gameName,$achievementsEarned,$maxAchievements);
+                $gameName = $_POST['gameName'];
+                $achievementsEarned = $_POST['gameAchievementsEarned'];
+                $maxAchievements = $_POST['gameMaxAchievements'];
+
+                //now execute the statement
+                mysqli_stmt_execute($stmt);
+                //once done, return back to the index page
+                $_SESSION['Message'] = "Game has been added";
+                $_SESSION['MessageType'] = "Success";
+
+                header('location:/index.php');
+                exit;
+
+
             }else{
                 $errorMessage = "Might want to double check your numbers, the max number field is smaller than the earned field.";
             }
@@ -67,17 +83,17 @@
         <form method="POST" class="mt-3 p-3 bg-light">
             <div class="mb-3">
                 <label for="gameName" class="form-label">Game Name</label>
-                <input type="text" class="form-control" id="gameName" name="gameName" aria-describedby="gameNameHelp">
+                <input type="text" class="form-control" value="<?php if(isset($_POST['gameName'])){print $_POST['gameName'];}?>" id="gameName" name="gameName" aria-describedby="gameNameHelp">
                 <div id="gameNameHelp" class="form-text">The name for the game, can't have a game without a name... maybe.</div>
             </div>
             <div class="mb-3">
                 <label for="gameAchievementsEarned" class="form-label">Achievements Earned</label>
-                <input type="number" min="0" value="0" class="form-control" id="gameAchievementsEarned" name="gameAchievementsEarned" aria-describedby="gameAchievementsEarnedHelp">
+                <input type="number" min="0" value="<?php if(isset($_POST['gameAchievementsEarned'])){print $_POST['gameAchievementsEarned'];}else{print 0;}?>" class="form-control" id="gameAchievementsEarned" name="gameAchievementsEarned" aria-describedby="gameAchievementsEarnedHelp">
                 <div id="gameAchievementsEarnedHelp" class="form-text">The amount of achievements you earned. If you didn't earn any yet, that's okay. Just keep it at zero.</div>
             </div>
             <div class="mb-3">
                 <label for="gameMaxAchievements" class="form-label">Max Achievements</label>
-                <input type="number" min="1" value="1" class="form-control" id="gameMaxAchievements" name="gameMaxAchievements" aria-describedby="gameMaxAchievementsHelp">
+                <input type="number" min="1" value="<?php if(isset($_POST['gameMaxAchievements'])){print $_POST['gameMaxAchievements'];}else{print 1;}?>" class="form-control" id="gameMaxAchievements" name="gameMaxAchievements" aria-describedby="gameMaxAchievementsHelp">
                 <div id="gameMaxAchievementsHelp" class="form-text">The amount of achievements for the game. Unlike the other section, this one can't be zero.</div>
             </div>
 
