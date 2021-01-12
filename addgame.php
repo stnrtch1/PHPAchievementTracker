@@ -41,6 +41,8 @@
 
                 //now execute the statement
                 mysqli_stmt_execute($stmt);
+                //close the database connection
+                mysqli_stmt_close($stmt);
                 //once done, return back to the index page
                 $_SESSION['Message'] = "Game has been added";
                 $_SESSION['MessageType'] = "Success";

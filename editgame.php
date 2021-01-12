@@ -82,6 +82,9 @@
       );
     };  
 
+    //close the database connection
+    mysqli_stmt_close($stmt);
+
 
 
 ?>
