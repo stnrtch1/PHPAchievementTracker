@@ -57,9 +57,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <!-- Font Awesome Icons-->
-    <script src="https://kit.fontawesome.com/fa43b4ba7b.js" crossorigin="anonymous"></script>
-
     <title>The Achievement Tracker</title>
   </head>
   <body class="mt-3">
@@ -93,12 +90,18 @@
                 foreach ($games as $game){ ?>
                   <tr>
                     <td>
-                      <button class="btn btn-primary mb-1">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn btn-danger mb-1">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
+                      <form method="POST" action="editgame.php">
+                        <input type="hidden" name="gameID" value="<?=$game['ID']?>">
+                        <button class="btn btn-primary mb-1">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                      </form>
+                      <form method="POST" action="deletegame.php">
+                        <input type="hidden" name="gameID" value="<?=$game['ID']?>">
+                        <button class="btn btn-danger mb-1 pr-3">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
                     </td>
                     <td><?=$game['Name']?></td>
                     <td><?=$game['AchievementsEarned']?></td>
@@ -118,6 +121,9 @@
     <!-- JS Scripts needed for Bootstrap-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome Icons-->
+    <script src="https://kit.fontawesome.com/fa43b4ba7b.js" crossorigin="anonymous"></script>
 
   </body>
 </html>
