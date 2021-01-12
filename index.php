@@ -35,6 +35,19 @@
     );
   }
 
+  //total game values
+  $totalAchievementsEarned = 0;
+  $totalMaxAchievements = 0;
+  $totalAveragePercent;
+
+  foreach ($games as $game){
+    $totalAchievementsEarned += $game['AchievementsEarned'];
+    $totalMaxAchievements += $game['MaxAchievements'];
+  }
+
+  //calculate the average percentage earned
+  $totalAveragePercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+
   //SESSION DATA
   //If any session data is available, show it for the user
   if(isset($_SESSION["Message"])){
@@ -74,43 +87,48 @@
       
 
       <?php
-        if(isset($games)){ ?> 
-          <table class="mt-3 table table-striped table-hover">
-            <thead class="thead-dark">
-              <tr>
-                <th></th>
-                <th>Game</th>
-                <th>Achievements Earned</th>
-                <th>Achievement Total</th>
-                <th>Percentage Earned</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-                foreach ($games as $game){ ?>
-                  <tr>
-                    <td>
-                      <form method="POST" action="editgame.php">
-                        <input type="hidden" name="gameID" value="<?=$game['ID']?>">
-                        <button class="btn btn-primary mb-1">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                      </form>
-                      <form method="POST" action="deletegame.php">
-                        <input type="hidden" name="gameID" value="<?=$game['ID']?>">
-                        <button class="btn btn-danger mb-1 pr-3">
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </form>
-                    </td>
-                    <td><?=$game['Name']?></td>
-                    <td><?=$game['AchievementsEarned']?></td>
-                    <td><?=$game['MaxAchievements']?></td>
-                    <td><?=$game['PercentageEarned']?></td>
-                  </tr>
-                <?php } ?>
-            </tbody>
-          </table>
+        if(isset($games)){ ?>
+          <div class="table-limitheight"> 
+            <table class="mt-3 table table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th></th>
+                  <th>Game</th>
+                  <th>Achievements Earned</th>
+                  <th>Achievement Total</th>
+                  <th>Percentage Earned</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                  foreach ($games as $game){ ?>
+                    <tr>
+                      <td>
+                        <form method="POST" action="editgame.php">
+                          <input type="hidden" name="gameID" value="<?=$game['ID']?>">
+                          <button class="btn btn-primary mb-1">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                        </form>
+                        <form method="POST" action="deletegame.php">
+                          <input type="hidden" name="gameID" value="<?=$game['ID']?>">
+                          <button class="btn btn-danger mb-1 pr-3">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </form>
+                      </td>
+                      <td><?=$game['Name']?></td>
+                      <td><?=$game['AchievementsEarned']?></td>
+                      <td><?=$game['MaxAchievements']?></td>
+                      <td><?=$game['PercentageEarned']?></td>
+                    </tr>
+                  <?php } ?>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$totalAchievementsEarned?> / <?=$totalMaxAchievements?></h3>
+          <h3 class="text-muted">Average Game Completion: <?=$totalAveragePercent?></h3>
         <?php } else { ?>
           <h3 class="mt-5 text-muted"><em>There are currently no games in your tracker. Click the "Add Game" button to add more and start tracking. </em></h3>
         <?php } ?>
