@@ -43,7 +43,16 @@
 
                 //now check if the two passwords match
                 if (password_verify($_POST['userPassword'],$password)){
-                    $errorMessage = "Good to go!";
+                    //set the userID in the session and send the user to the index page
+                    $_SESSION['loggedID'] = $userID;
+                    $_SESSION['Message'] = "Login Successful. Hello, " . $username;
+                    $_SESSION['MessageType'] = "Success";
+
+                    //close the connection
+                    mysqli_close($connection);
+
+                    header("Location:/index.php");
+                    exit;
                 }else{
                     $errorMessage = "Username and/or Password is incorrect!";
                 }

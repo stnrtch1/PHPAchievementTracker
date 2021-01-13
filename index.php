@@ -1,6 +1,14 @@
 <?php 
   session_start();
 
+  //if there is no loggedID, send the user to the login page
+  if(!isset($_SESSION['loggedID'])){
+    header('location:/login.php');
+    exit;
+  }else{
+    $userID = $_SESSION['loggedID'];
+  }
+
   //setup database config
   include 'config/config.inc.php';
   $DB_HOST = $config['DB_HOST'];
@@ -14,39 +22,43 @@
   or die(mysqli_error($connection));
   $db = mysqli_select_db($connection,$DB_DATABASE) or die(mysqli_error($connection));
 
-  $sql = "SELECT * FROM $DB_GAMETABLE ORDER BY gameName ASC";
+  $sql = "SELECT * FROM $DB_GAMETABLE WHERE userID = $userID ORDER BY gameName ASC";
   $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
-  //put all the game info into an array
-  while($row = mysqli_fetch_array($result)){
-    //there's an additional item that will be added to the array
-    //it's the completed percentage of games and will be calculated based on the count and max
-    $count = $row['gameAchievementCount'];
-    $max = $row['gameAchievementMax'];
+  //if the user has no games currently, ignore all game gathering
+  if ($result->num_rows != 0){
+    //put all the game info into an array
+    while($row = mysqli_fetch_array($result)){
+      //there's an additional item that will be added to the array
+      //it's the completed percentage of games and will be calculated based on the count and max
+      $count = $row['gameAchievementCount'];
+      $max = $row['gameAchievementMax'];
 
-    $percentage = round(($count / $max) * 100, 2) .'%';
+      $percentage = round(($count / $max) * 100, 2) .'%';
 
-    $games[] = array(
-      'ID'                 => $row['gameID'],
-      'Name'               => $row['gameName'],
-      'AchievementsEarned' => $row['gameAchievementCount'],
-      'MaxAchievements'    => $row['gameAchievementMax'],
-      'PercentageEarned'   => $percentage,
-    );
+      $games[] = array(
+        'ID'                 => $row['gameID'],
+        'Name'               => $row['gameName'],
+        'AchievementsEarned' => $row['gameAchievementCount'],
+        'MaxAchievements'    => $row['gameAchievementMax'],
+        'PercentageEarned'   => $percentage,
+      );
+    }
+
+    //total game values
+    $totalAchievementsEarned = 0;
+    $totalMaxAchievements = 0;
+    $totalAveragePercent;
+
+    foreach ($games as $game){
+      $totalAchievementsEarned += $game['AchievementsEarned'];
+      $totalMaxAchievements += $game['MaxAchievements'];
+    }
+
+    //calculate the average percentage earned
+    $totalAveragePercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
   }
-
-  //total game values
-  $totalAchievementsEarned = 0;
-  $totalMaxAchievements = 0;
-  $totalAveragePercent;
-
-  foreach ($games as $game){
-    $totalAchievementsEarned += $game['AchievementsEarned'];
-    $totalMaxAchievements += $game['MaxAchievements'];
-  }
-
-  //calculate the average percentage earned
-  $totalAveragePercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+  
 
   //SESSION DATA
   //If any session data is available, show it for the user
@@ -61,6 +73,9 @@
   print "Past Password: Austin12 <br>";
   $password = password_hash("Austin12",PASSWORD_DEFAULT);
   print "New Password: " . $password;
+
+  print "<br>Second User Password: Tester21<br>";
+  print "New Second Password: " . password_hash("Tester21",PASSWORD_DEFAULT);
 ?>
 
 <!doctype html>
