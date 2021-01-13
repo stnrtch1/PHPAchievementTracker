@@ -7,5 +7,5 @@
         'DB_PASSWORD'=>'',
         'DB_DATABASE'=>'achievementtracker',
         'DB_GAMETABLE'=>'games',
-        
+        'DB_USERTABLE'=>'users',
     );

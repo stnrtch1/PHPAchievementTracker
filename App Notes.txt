@@ -16,6 +16,7 @@
 
 Game Object:
 gameID
+userID
 gameName
 gameAchievementCount
 gameAchievementMax
@@ -23,3 +24,8 @@ gameAchievementMax
 - Potential Login System
 - Multiple users can use the tracker and keep their own progress
 - (Maybe) look into comparing same games
+
+Users Object:
+userID
+userName
+userPassword

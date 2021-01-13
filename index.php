@@ -58,6 +58,9 @@
     $_SESSION["MessageType"] = "";
   }
 
+  print "Past Password: Austin12 <br>";
+  $password = password_hash("Austin12",PASSWORD_DEFAULT);
+  print "New Password: " . $password;
 ?>
 
 <!doctype html>
