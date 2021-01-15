@@ -7,6 +7,7 @@
     exit;
   }else{
     $userID = $_SESSION['loggedID'];
+    $username = $_SESSION['loggedUsername'];
   }
 
   //setup database config
@@ -93,7 +94,20 @@
   <body class="mt-3">
     <div class="container">
 
-      <h1>The Achievement Tracker</h1>
+      <div class="row">
+        <div class="col-8">
+          <h1>The Achievement Tracker</h1>
+        </div>
+        <div class="col-4">
+          <div class="row-logout">            
+            <p class="text-muted text-end text-logout"><em>Hello, <?=$username?></em></p>
+            <form method="POST" action="login.php">
+              <button name="logout" class="btn btn-primary">Log Out</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
 
       <?php if(isset($message)){ ?>
         <div class="mt-2 mb-2 <?php if($status=="Success"){print "text-success";}else{print "text-danger";}?>"><?=$message?></div>

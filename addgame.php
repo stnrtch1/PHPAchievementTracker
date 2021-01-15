@@ -9,6 +9,14 @@
         exit;
     }
 
+    //if there is no loggedID, send the user to the login page
+    if(!isset($_SESSION['loggedID'])){
+        header('location:/login.php');
+        exit;
+    }else{
+        $userID = $_SESSION['loggedID'];
+    }
+
     //setup database config
     include 'config/config.inc.php';
     $DB_HOST = $config['DB_HOST'];
@@ -79,7 +87,19 @@
   <body class="mt-3">
     <div class="container">
 
-        <h1>The Achievement Tracker</h1>
+        <div class="row">
+            <div class="col-8">
+                <h1>The Achievement Tracker</h1>
+            </div>
+            <div class="col-4">
+                <div class="row-logout">            
+                    <p class="text-muted text-end text-logout"><em>Hello, username</em></p>
+                    <form method="POST" action="login.php">
+                    <button name="logout" class="btn btn-primary">Log Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
         <h3 class="text-muted"><em>Add Game</em></h3>
 
         <form method="POST" class="mt-3 p-3 bg-light">

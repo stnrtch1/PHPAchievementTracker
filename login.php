@@ -45,6 +45,7 @@
                 if (password_verify($_POST['userPassword'],$password)){
                     //set the userID in the session and send the user to the index page
                     $_SESSION['loggedID'] = $userID;
+                    $_SESSION['loggedUsername'] = $username;
                     $_SESSION['Message'] = "Login Successful. Hello, " . $username;
                     $_SESSION['MessageType'] = "Success";
 
