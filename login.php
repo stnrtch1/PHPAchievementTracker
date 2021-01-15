@@ -1,7 +1,12 @@
 <?php 
     session_start();
 
-    print_r($_POST);
+    //LOGOUT
+    //listen for a log out from another page and if so, clear the logged in user
+    if(isset($_POST['logout'])){
+        session_unset();
+        $errorMessage = "You have successfully logged out";
+    }
 
     //LOGIN
     //user hits "login", see if their credientials are correct
