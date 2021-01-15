@@ -15,6 +15,7 @@
         exit;
     }else{
         $userID = $_SESSION['loggedID'];
+        $username = $_SESSION['loggedUsername'];
     }
 
     //setup database config
@@ -40,9 +41,9 @@
             //is the max achievements field greater or equal to the achievements earned field
             if($_POST['gameMaxAchievements'] >= $_POST['gameAchievementsEarned']){
                 //everything is all good, prepare the sql statement
-                $sql = "INSERT INTO $DB_GAMETABLE VALUES (null,?,?,?)";
+                $sql = "INSERT INTO $DB_GAMETABLE VALUES (null,?,?,?,?)";
                 $stmt = mysqli_prepare($connection,$sql);
-                mysqli_stmt_bind_param($stmt,"sii",$gameName,$achievementsEarned,$maxAchievements);
+                mysqli_stmt_bind_param($stmt,"isii",$userID,$gameName,$achievementsEarned,$maxAchievements);
                 $gameName = $_POST['gameName'];
                 $achievementsEarned = $_POST['gameAchievementsEarned'];
                 $maxAchievements = $_POST['gameMaxAchievements'];
@@ -93,7 +94,7 @@
             </div>
             <div class="col-4">
                 <div class="row-logout">            
-                    <p class="text-muted text-end text-logout"><em>Hello, username</em></p>
+                    <p class="text-muted text-end text-logout"><em>Hello, <?=$username?></em></p>
                     <form method="POST" action="login.php">
                     <button name="logout" class="btn btn-primary">Log Out</button>
                     </form>
