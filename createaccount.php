@@ -90,8 +90,6 @@
         mysqli_close($connection);
     }
 
-    print_r($_POST);
-
 ?>
 
 <!doctype html>

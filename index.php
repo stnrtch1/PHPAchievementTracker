@@ -70,10 +70,6 @@
     $_SESSION["Message"] = "";
     $_SESSION["MessageType"] = "";
   }
-
-  // print "Past Password: Austin12 <br>"
-
-  // print "<br>Second User Password: Tester21<br>";
 ?>
 
 <!doctype html>

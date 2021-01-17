@@ -67,9 +67,6 @@
             $errorMessage = "Game Name Field is empty!";
         }
     }
-    
-    
-
 
 ?>
 
