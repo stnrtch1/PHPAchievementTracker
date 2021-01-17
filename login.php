@@ -115,7 +115,7 @@
 
         <form method="POST" action="createaccount.php" >
             <div class="form-text mt-4">Don't have an account? Create one now</div>
-            <button type="submit" name="create" class="btn btn-primary mt-2">Create Account</button>
+            <button type="submit" class="btn btn-primary mt-2">Create Account</button>
         </form>
 
 
