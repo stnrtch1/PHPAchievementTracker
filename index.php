@@ -1,5 +1,8 @@
 <?php 
   session_start();
+  include 'config/config.inc.php';
+
+  print_r($_POST);
 
   //if there is no loggedID, send the user to the login page
   if(!isset($_SESSION['loggedID'])){
@@ -10,8 +13,27 @@
     $username = $_SESSION['loggedUsername'];
   }
 
+  //SORT PATTERN CHANGE
+  //if there is a post changing the sort pattern, declare it here
+  if(isset($_POST['sortPattern'])){
+    //set the pattern as the session data
+    $_SESSION['SortPattern'] = $_POST['sortPattern'];
+    $sortDirection = getSortKey($_SESSION["SortPattern"]);
+  }else{
+    //if there is no POST data, then use the session data
+    //create a SortPattern session variable if one does not already exist
+    if(!isset($_SESSION["SortPattern"])){
+      $_SESSION["SortPattern"] = "nameA";
+      $sortDirection = getSortKey($_SESSION["SortPattern"]);
+    }else{
+      $sortDirection = getSortKey($_SESSION["SortPattern"]);
+    }
+  }
+
+
+  
+
   //setup database config
-  include 'config/config.inc.php';
   $DB_HOST = $config['DB_HOST'];
   $DB_USERNAME = $config['DB_USERNAME'];
   $DB_PASSWORD = $config['DB_PASSWORD'];
@@ -23,7 +45,7 @@
   or die(mysqli_error($connection));
   $db = mysqli_select_db($connection,$DB_DATABASE) or die(mysqli_error($connection));
 
-  $sql = "SELECT * FROM $DB_GAMETABLE WHERE userID = $userID ORDER BY gameName ASC";
+  $sql = "SELECT * FROM $DB_GAMETABLE WHERE userID = $userID ORDER BY $sortDirection";
   $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
   //if the user has no games currently, ignore all game gathering
@@ -70,6 +92,7 @@
     $_SESSION["Message"] = "";
     $_SESSION["MessageType"] = "";
   }
+
 ?>
 
 <!doctype html>
@@ -118,7 +141,20 @@
               <thead class="thead-dark">
                 <tr>
                   <th></th>
-                  <th>Game</th>
+                  <th>
+                    <form method="POST">
+                      <button>Game</button>
+                      <?php if($_SESSION["SortPattern"] == "nameA") { ?>
+                        <input type="hidden" name="sortPattern" value="nameD">
+                        <i class="fas fa-angle-down"></i> 
+                      <?php }else if($_SESSION["SortPattern"] == "nameD"){ ?>
+                        <input type="hidden" name="sortPattern" value="nameA">
+                        <i class="fas fa-angle-up"></i>
+                      <?php }else{ ?>
+                        <input type="hidden" name="sortPattern" value="nameA">
+                      <?php } ?>
+                    </form>
+                  </th>
                   <th>Achievements Earned</th>
                   <th>Achievement Total</th>
                   <th>Percentage Earned</th>
