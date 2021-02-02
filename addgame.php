@@ -41,12 +41,13 @@
             //is the max achievements field greater or equal to the achievements earned field
             if($_POST['gameMaxAchievements'] >= $_POST['gameAchievementsEarned']){
                 //everything is all good, prepare the sql statement
-                $sql = "INSERT INTO $DB_GAMETABLE VALUES (null,?,?,?,?)";
+                $sql = "INSERT INTO $DB_GAMETABLE VALUES (null,?,?,?,?,?)";
                 $stmt = mysqli_prepare($connection,$sql);
-                mysqli_stmt_bind_param($stmt,"isii",$userID,$gameName,$achievementsEarned,$maxAchievements);
+                mysqli_stmt_bind_param($stmt,"isiid",$userID,$gameName,$achievementsEarned,$maxAchievements,$percentageEarned);
                 $gameName = $_POST['gameName'];
                 $achievementsEarned = $_POST['gameAchievementsEarned'];
                 $maxAchievements = $_POST['gameMaxAchievements'];
+                $percentageEarned = round(($achievementsEarned / $maxAchievements) * 100, 2);
 
                 //now execute the statement
                 mysqli_stmt_execute($stmt);

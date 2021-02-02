@@ -52,19 +52,12 @@
   if ($result->num_rows != 0){
     //put all the game info into an array
     while($row = mysqli_fetch_array($result)){
-      //there's an additional item that will be added to the array
-      //it's the completed percentage of games and will be calculated based on the count and max
-      $count = $row['gameAchievementCount'];
-      $max = $row['gameAchievementMax'];
-
-      $percentage = round(($count / $max) * 100, 2) .'%';
-
       $games[] = array(
         'ID'                 => $row['gameID'],
         'Name'               => $row['gameName'],
         'AchievementsEarned' => $row['gameAchievementCount'],
         'MaxAchievements'    => $row['gameAchievementMax'],
-        'PercentageEarned'   => $percentage,
+        'PercentageEarned'   => $row['gamePercentageEarned'] . '%',
       );
     }
 
@@ -146,10 +139,10 @@
                       <button>Game</button>
                       <?php if($_SESSION["SortPattern"] == "nameA") { ?>
                         <input type="hidden" name="sortPattern" value="nameD">
-                        <i class="fas fa-angle-down"></i> 
+                        <i class="fas fa-angle-up"></i> 
                       <?php }else if($_SESSION["SortPattern"] == "nameD"){ ?>
                         <input type="hidden" name="sortPattern" value="nameA">
-                        <i class="fas fa-angle-up"></i>
+                        <i class="fas fa-angle-down"></i>
                       <?php }else{ ?>
                         <input type="hidden" name="sortPattern" value="nameA">
                       <?php } ?>
