@@ -11,6 +11,22 @@
     overflow: auto;
  }
 
+ .table-limitheight form{
+    margin: 0;
+ }
+
+ .table-button{
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  padding: 0;
+ }
+
+ .table-button:hover{
+  color: #cccccc;
+ }
+
  .row-logout{
    display: flex;
    flex-flow: row;

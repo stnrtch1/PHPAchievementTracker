@@ -2,8 +2,6 @@
   session_start();
   include 'config/config.inc.php';
 
-  print_r($_POST);
-
   //if there is no loggedID, send the user to the login page
   if(!isset($_SESSION['loggedID'])){
     header('location:/login.php');
@@ -136,7 +134,7 @@
                   <th></th>
                   <th>
                     <form method="POST">
-                      <button>Game</button>
+                      <button class="table-button">Game</button>
                       <?php if($_SESSION["SortPattern"] == "nameA") { ?>
                         <input type="hidden" name="sortPattern" value="nameD">
                         <i class="fas fa-angle-down"></i> 
@@ -150,7 +148,7 @@
                   </th>
                   <th>
                     <form method="POST">
-                      <button>Achievements Earned</button>
+                      <button class="table-button">Achievements Earned</button>
                       <?php if($_SESSION["SortPattern"] == "countA") { ?>
                         <input type="hidden" name="sortPattern" value="countD">
                         <i class="fas fa-angle-up"></i> 
@@ -164,7 +162,7 @@
                   </th>
                   <th>
                     <form method="POST">
-                      <button>Achievement Total</button>
+                      <button class="table-button">Achievement Total</button>
                       <?php if($_SESSION["SortPattern"] == "maxA") { ?>
                         <input type="hidden" name="sortPattern" value="maxD">
                         <i class="fas fa-angle-up"></i> 
@@ -178,7 +176,7 @@
                   </th>
                   <th>
                     <form method="POST">
-                      <button>Percentage Earned</button>
+                      <button class="table-button">Percentage Earned</button>
                       <?php if($_SESSION["SortPattern"] == "percentA") { ?>
                         <input type="hidden" name="sortPattern" value="percentD">
                         <i class="fas fa-angle-up"></i> 
