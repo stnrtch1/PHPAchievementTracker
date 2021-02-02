@@ -139,18 +139,57 @@
                       <button>Game</button>
                       <?php if($_SESSION["SortPattern"] == "nameA") { ?>
                         <input type="hidden" name="sortPattern" value="nameD">
-                        <i class="fas fa-angle-up"></i> 
+                        <i class="fas fa-angle-down"></i> 
                       <?php }else if($_SESSION["SortPattern"] == "nameD"){ ?>
                         <input type="hidden" name="sortPattern" value="nameA">
-                        <i class="fas fa-angle-down"></i>
+                        <i class="fas fa-angle-up"></i>
                       <?php }else{ ?>
                         <input type="hidden" name="sortPattern" value="nameA">
                       <?php } ?>
                     </form>
                   </th>
-                  <th>Achievements Earned</th>
-                  <th>Achievement Total</th>
-                  <th>Percentage Earned</th>
+                  <th>
+                    <form method="POST">
+                      <button>Achievements Earned</button>
+                      <?php if($_SESSION["SortPattern"] == "countA") { ?>
+                        <input type="hidden" name="sortPattern" value="countD">
+                        <i class="fas fa-angle-up"></i> 
+                      <?php }else if($_SESSION["SortPattern"] == "countD"){ ?>
+                        <input type="hidden" name="sortPattern" value="countA">
+                        <i class="fas fa-angle-down"></i>
+                      <?php }else{ ?>
+                        <input type="hidden" name="sortPattern" value="countD">
+                      <?php } ?>
+                    </form>
+                  </th>
+                  <th>
+                    <form method="POST">
+                      <button>Achievement Total</button>
+                      <?php if($_SESSION["SortPattern"] == "maxA") { ?>
+                        <input type="hidden" name="sortPattern" value="maxD">
+                        <i class="fas fa-angle-up"></i> 
+                      <?php }else if($_SESSION["SortPattern"] == "maxD"){ ?>
+                        <input type="hidden" name="sortPattern" value="maxA">
+                        <i class="fas fa-angle-down"></i>
+                      <?php }else{ ?>
+                        <input type="hidden" name="sortPattern" value="maxD">
+                      <?php } ?>
+                    </form>
+                  </th>
+                  <th>
+                    <form method="POST">
+                      <button>Percentage Earned</button>
+                      <?php if($_SESSION["SortPattern"] == "percentA") { ?>
+                        <input type="hidden" name="sortPattern" value="percentD">
+                        <i class="fas fa-angle-up"></i> 
+                      <?php }else if($_SESSION["SortPattern"] == "percentD"){ ?>
+                        <input type="hidden" name="sortPattern" value="percentA">
+                        <i class="fas fa-angle-down"></i>
+                      <?php }else{ ?>
+                        <input type="hidden" name="sortPattern" value="percentD">
+                      <?php } ?>
+                    </form>
+                  </th>
                 </tr>
               </thead>
               <tbody>
