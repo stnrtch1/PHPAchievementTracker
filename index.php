@@ -120,9 +120,15 @@
         <div class="mt-2 mb-2 <?php if($status=="Success"){print "text-success";}else{print "text-danger";}?>"><?=$message?></div>
       <?php } ?>
 
-      <form method="POST" action="addgame.php">
-        <button class="btn btn-primary">Add Game</button>
-      </form>
+      <div class="row">
+        <form method="POST" action="addgame.php" class="col-2">
+          <button class="btn btn-primary">Add Game</button>
+        </form>
+        <form method="POST" action="comparegame.php" class="col-2">
+          <button class="btn btn-primary">Compare Games</button>
+        </form>
+      </div>
+      
       
 
       <?php
