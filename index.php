@@ -55,22 +55,26 @@
         'Name'               => $row['gameName'],
         'AchievementsEarned' => $row['gameAchievementCount'],
         'MaxAchievements'    => $row['gameAchievementMax'],
-        'PercentageEarned'   => $row['gamePercentageEarned'] . '%',
+        'PercentageEarned'   => $row['gamePercentageEarned'],
       );
     }
 
     //total game values
     $totalAchievementsEarned = 0;
     $totalMaxAchievements = 0;
-    $totalAveragePercent;
+    $totalEarnedPercent = 0;
+    $totalAveragePercent = 0;
 
     foreach ($games as $game){
       $totalAchievementsEarned += $game['AchievementsEarned'];
       $totalMaxAchievements += $game['MaxAchievements'];
+      $totalAveragePercent += $game['PercentageEarned'];
     }
 
-    //calculate the average percentage earned
-    $totalAveragePercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+    //calculate the average and total percentage earned
+    $totalEarnedPercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+
+    $totalAveragePercent = ( round(($totalAveragePercent / count($games)),2 ) ) . '%';
   }
   
 
@@ -217,14 +221,14 @@
                       <td><?=$game['Name']?></td>
                       <td><?=$game['AchievementsEarned']?></td>
                       <td><?=$game['MaxAchievements']?></td>
-                      <td><?=$game['PercentageEarned']?></td>
+                      <td><?=$game['PercentageEarned'] . '%'?></td>
                     </tr>
                   <?php } ?>
               </tbody>
             </table>
           </div>
 
-          <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$totalAchievementsEarned?> / <?=$totalMaxAchievements?></h3>
+          <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$totalAchievementsEarned?> / <?=$totalMaxAchievements?> <?='('. $totalEarnedPercent . ')'?></h3>
           <h3 class="text-muted">Average Game Completion: <?=$totalAveragePercent?></h3>
         <?php } else { ?>
           <h3 class="mt-5 text-muted"><em>There are currently no games in your tracker. Click the "Add Game" button to add more and start tracking. </em></h3>

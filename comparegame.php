@@ -74,6 +74,7 @@
   }
 
   //now get the other table's games
+  //SELECT `games`.*, `users`.`userName` FROM `games` LEFT JOIN `users` ON games.userID = users.userID
   $sql = "SELECT * FROM $DB_GAMETABLE ORDER BY $sortDirection";
   $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
