@@ -37,6 +37,7 @@
   $DB_PASSWORD = $config['DB_PASSWORD'];
   $DB_DATABASE = $config['DB_DATABASE'];
   $DB_GAMETABLE = $config['DB_GAMETABLE'];
+  $DB_USERTABLE = $config['DB_USERTABLE'];
 
   //now, connect to the database
   $connection = mysqli_connect($DB_HOST,$DB_USERNAME,$DB_PASSWORD)
@@ -55,53 +56,62 @@
         'Name'               => $row['gameName'],
         'AchievementsEarned' => $row['gameAchievementCount'],
         'MaxAchievements'    => $row['gameAchievementMax'],
-        'PercentageEarned'   => $row['gamePercentageEarned'] . '%',
+        'PercentageEarned'   => $row['gamePercentageEarned'],
       );
     }
 
     //total game values
     $totalAchievementsEarned = 0;
     $totalMaxAchievements = 0;
-    $totalAveragePercent;
+    $totalEarnedPercent = 0;
+    $totalAveragePercent = 0;
 
     foreach ($games as $game){
       $totalAchievementsEarned += $game['AchievementsEarned'];
       $totalMaxAchievements += $game['MaxAchievements'];
+      $totalAveragePercent += $game['PercentageEarned'];
     }
 
-    //calculate the average percentage earned
-    $totalAveragePercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+    //calculate the average and total percentage earned
+    $totalEarnedPercent = round(($totalAchievementsEarned / $totalMaxAchievements) * 100, 2) .'%';
+
+    $totalAveragePercent = ( round(($totalAveragePercent / count($games)),2 ) ) . '%';
   }
+
 
   //now get the other table's games
   //SELECT `games`.*, `users`.`userName` FROM `games` LEFT JOIN `users` ON games.userID = users.userID
-  $sql = "SELECT * FROM $DB_GAMETABLE ORDER BY $sortDirection";
+  $sql = "SELECT $DB_GAMETABLE.*, $DB_USERTABLE.`userName` FROM $DB_GAMETABLE LEFT JOIN $DB_USERTABLE ON $DB_GAMETABLE.userID = $DB_USERTABLE.userID ORDER BY $sortDirection";
   $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
-  //if the user has no games currently, ignore all game gathering
-  if ($result->num_rows != 0){
-    //put all the game info into an array
-    while($row = mysqli_fetch_array($result)){
-      $theirGames[] = array(
-        'ID'                 => $row['gameID'],
-        'Name'               => $row['gameName'],
-        'AchievementsEarned' => $row['gameAchievementCount'],
-        'MaxAchievements'    => $row['gameAchievementMax'],
-        'PercentageEarned'   => $row['gamePercentageEarned'] . '%',
-      );
-    }
+    //if the user has no games currently, ignore all game gathering
+    if ($result->num_rows != 0){
+        //put all the game info into an array
+        while($row = mysqli_fetch_array($result)){
+            $theirGames[] = array(
+                'ID'                 => $row['gameID'],
+                'Name'               => $row['gameName'],
+                'UserName'           => $row['userName'],
+                'AchievementsEarned' => $row['gameAchievementCount'],
+                'MaxAchievements'    => $row['gameAchievementMax'],
+                'PercentageEarned'   => $row['gamePercentageEarned'],
+            );
+        }
 
-    $theirTotalAchievementsEarned = 0;
-    $theirTotalMaxAchievements = 0;
-    $theirTotalAveragePercent = 0;
+        $theirTotalAchievementsEarned = 0;
+        $theirTotalMaxAchievements = 0;
+        $theirTotalEarnedPercent = 0;
+        $theirTotalAveragePercent = 0;
 
-    foreach ($theirGames as $theirGame){
-        $theirTotalAchievementsEarned += $theirGame['AchievementsEarned'];
-        $theirTotalMaxAchievements += $theirGame['MaxAchievements'];
-      }
+        foreach ($theirGames as $theirGame){
+            $theirTotalAchievementsEarned += $theirGame['AchievementsEarned'];
+            $theirTotalMaxAchievements += $theirGame['MaxAchievements'];
+            $theirTotalAveragePercent += $theirGame['PercentageEarned'];
+        }
   
-      //calculate the average percentage earned
-      $theirTotalAveragePercent = round(($theirTotalAchievementsEarned / $theirTotalMaxAchievements) * 100, 2) .'%';
+        $theirTotalEarnedPercent = round(($theirTotalAchievementsEarned / $theirTotalMaxAchievements) * 100, 2) .'%';
+
+        $theirTotalAveragePercent = ( round(($theirTotalAveragePercent / count($theirGames)),2 ) ) . '%';
     }
 
   //SESSION DATA
@@ -238,13 +248,13 @@
                                         <td><?=$game['Name']?></td>
                                         <td><?=$game['AchievementsEarned']?></td>
                                         <td><?=$game['MaxAchievements']?></td>
-                                        <td><?=$game['PercentageEarned']?></td>
+                                        <td><?=$game['PercentageEarned'] . '%'?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
                     </div>
-                    <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$totalAchievementsEarned?> / <?=$totalMaxAchievements?></h3>
+                    <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$totalAchievementsEarned?> / <?=$totalMaxAchievements?> <?='('. $totalEarnedPercent . ')'?></h3>
                     <h3 class="text-muted">Average Game Completion: <?=$totalAveragePercent?></h3>
                 </div>
             <?php } else { ?>
@@ -271,6 +281,9 @@
                                                 <input type="hidden" name="sortPattern" value="nameA">
                                             <?php } ?>
                                         </form>
+                                    </th>
+                                    <th>
+                                        User
                                     </th>
                                     <th>
                                         <form method="POST">
@@ -321,15 +334,16 @@
                                 foreach ($theirGames as $theirGame){ ?>
                                     <tr>
                                         <td><?=$theirGame['Name']?></td>
+                                        <td><?=$theirGame['UserName']?></td>
                                         <td><?=$theirGame['AchievementsEarned']?></td>
                                         <td><?=$theirGame['MaxAchievements']?></td>
-                                        <td><?=$theirGame['PercentageEarned']?></td>
+                                        <td><?=$theirGame['PercentageEarned'] . '%'?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
                     </div>
-                    <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$theirTotalAchievementsEarned?> / <?=$theirTotalMaxAchievements?></h3>
+                    <h3 class="mt-4 text-muted">Total Achievements Earned: <?=$theirTotalAchievementsEarned?> / <?=$theirTotalMaxAchievements?> <?='('. $theirTotalEarnedPercent . ')'?></h3>
                     <h3 class="text-muted">Average Game Completion: <?=$theirTotalAveragePercent?></h3>
                 </div> 
             <?php } ?>
@@ -341,6 +355,9 @@
     <!-- JS Scripts needed for Bootstrap-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome Icons-->
+    <script src="https://kit.fontawesome.com/fa43b4ba7b.js" crossorigin="anonymous"></script>
 
   </body>
 </html>
