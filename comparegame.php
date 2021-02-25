@@ -114,6 +114,22 @@
         $theirTotalAveragePercent = ( round(($theirTotalAveragePercent / count($theirGames)),2 ) ) . '%';
     }
 
+    //get the users for the dropdown
+    $sql= "SELECT DISTINCT $DB_USERTABLE.`userID`, $DB_USERTABLE.`userName` FROM $DB_USERTABLE LEFT JOIN $DB_GAMETABLE ON $DB_USERTABLE.`userID` = $DB_GAMETABLE.`userID` WHERE $DB_GAMETABLE.`userID` IS NOT NULL";
+    $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
+
+    if ($result->num_rows != 0){
+        //put the user info into an array
+        while($row = mysqli_fetch_array($result)){
+            $users[] = array(
+                'ID'       => $row['userID'],
+                'UserName' => $row['userName'],
+            );
+        }
+    }
+
+    print_r($users);
+
   //SESSION DATA
   //If any session data is available, show it for the user
   if(isset($_SESSION["Message"])){
@@ -165,11 +181,13 @@
         </form>
         <form method="POST" class="col-2">
             <select name="selectedID" onchange="this.form.submit()">
-                <option value="1">First</option>
-                <option value="2">Second</option>
-                <option value="3">Third</option>
-                <option value="4">Fourth</option>
-                <option value="5">Fifths</option>
+                <option value="0">All Users</option>
+                <?php 
+                    if(isset($users)){ 
+                        foreach($users as $user) { ?>
+                            <option value=<?=$user['ID']?> <?php if($_POST['selectedID'] == $user['ID']){ print "selected" ;}?> ><?=$user['UserName']?></option>
+                <?php   } 
+                    }  ?>
             </select>
         </form>
       </div>
