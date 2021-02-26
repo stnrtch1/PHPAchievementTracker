@@ -2,7 +2,6 @@
   session_start();
   include 'config/config.inc.php';
 
-  print_r($_POST);
 
   //if there is no loggedID, send the user to the login page
   if(!isset($_SESSION['loggedID'])){
@@ -29,6 +28,22 @@
       $sortDirection = getSortKey($_SESSION["SortPattern"]);
     }
   }
+
+    //SELECTED ID CHANGE
+    //check if the drop down has changed and then apply it to the dropdown
+    if(isset($_POST["selectedID"])){
+        //if the post is set, then show the dropdown change
+        $_SESSION["selectedID"] = $_POST['selectedID'];
+        $selectedID = $_SESSION["selectedID"];
+    }else{
+        //if the post is not set, check if there is a session value and use that
+        if(isset($_SESSION['selectedID'])){
+            $selectedID = $_SESSION["selectedID"]; 
+        }else{
+            //if the session value is not set, then set to default value
+            $selectedID = 0;
+        }
+    }
 
 
   //setup database config
@@ -81,7 +96,15 @@
 
   //now get the other table's games
   //SELECT `games`.*, `users`.`userName` FROM `games` LEFT JOIN `users` ON games.userID = users.userID
-  $sql = "SELECT $DB_GAMETABLE.*, $DB_USERTABLE.`userName` FROM $DB_GAMETABLE LEFT JOIN $DB_USERTABLE ON $DB_GAMETABLE.userID = $DB_USERTABLE.userID ORDER BY $sortDirection";
+
+  //if the selected ID is equal to 0, then grab all games.
+  //if not, then grab the games from the user
+  if($selectedID != 0){
+    $sql = "SELECT $DB_GAMETABLE.*, $DB_USERTABLE.`userName` FROM $DB_GAMETABLE LEFT JOIN $DB_USERTABLE ON $DB_GAMETABLE.userID = $DB_USERTABLE.userID WHERE $DB_USERTABLE.userID = $selectedID ORDER BY $sortDirection";
+  }else{
+    $sql = "SELECT $DB_GAMETABLE.*, $DB_USERTABLE.`userName` FROM $DB_GAMETABLE LEFT JOIN $DB_USERTABLE ON $DB_GAMETABLE.userID = $DB_USERTABLE.userID ORDER BY $sortDirection";
+  }
+  
   $result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 
     //if the user has no games currently, ignore all game gathering
@@ -128,7 +151,6 @@
         }
     }
 
-    print_r($users);
 
   //SESSION DATA
   //If any session data is available, show it for the user
@@ -152,7 +174,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <title>The Achievement Tracker</title>
+    <title>The Achievement Tracker - Compare Games</title>
   </head>
   <body class="mt-3">
     <div class="container">
@@ -180,12 +202,13 @@
           <button class="btn btn-primary">Back to Table</button>
         </form>
         <form method="POST" class="col-2">
+            Select User:
             <select name="selectedID" onchange="this.form.submit()">
                 <option value="0">All Users</option>
                 <?php 
                     if(isset($users)){ 
                         foreach($users as $user) { ?>
-                            <option value=<?=$user['ID']?> <?php if($_POST['selectedID'] == $user['ID']){ print "selected" ;}?> ><?=$user['UserName']?></option>
+                            <option value=<?=$user['ID']?> <?php if($selectedID == $user['ID']){ print "selected" ;}?> ><?=$user['UserName']?></option>
                 <?php   } 
                     }  ?>
             </select>
